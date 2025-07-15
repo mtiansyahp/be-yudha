@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\PelatihanController;
 use App\Http\Controllers\Api\PenilaianController;
 use App\Http\Controllers\Api\LogPenilaianController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +24,9 @@ use App\Http\Controllers\Api\LogPenilaianController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/login',  [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 
 Route::apiResource('users', UserController::class);
@@ -47,3 +52,5 @@ Route::post('/penilaian/proses-semua', [PenilaianController::class, 'prosesSemua
 Route::post('/penilaian/proses-batch/{pelatihanId}', [PenilaianController::class, 'prosesBatch']);
 
 Route::get('log-penilaian/{id}', [LogPenilaianController::class, 'show']);
+
+Route::get('/dashboard/summary', [DashboardController::class, 'summary']);

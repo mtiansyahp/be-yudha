@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -29,10 +30,48 @@ class UserController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required|string',
             'role' => 'required|string',
-            // tambahkan validasi lain sesuai kebutuhan kolom
         ]);
 
+        // Ambil nilai terakhir dari ID, lalu +1
+        $lastId = User::orderByDesc('id')->first()?->id;
+        $newId = $lastId ? (string)((int)$lastId + 1) : '1';
+        $validated['id'] = $newId;
+
+        // Password di-hash
         $validated['password'] = Hash::make($validated['password']);
+
+        // Ambil semua field tambahan dari payload request
+        $optionalFields = [
+            'posisi',
+            'jurusan',
+            'pendidikan_terakhir',
+            'umur',
+            'tempat_lahir',
+            'tanggal_lahir',
+            'no_telepon',
+            'jabatan',
+            'statusAkun',
+            'sertifikasi',
+            'ikut_pelatihan',
+            'nilai',
+            'b1',
+            'b2',
+            'b3',
+            'b4',
+            'b5',
+            'a1',
+            'a2',
+            'a3',
+            'a4',
+            'a5'
+        ];
+
+        foreach ($optionalFields as $field) {
+            if ($request->has($field)) {
+                $validated[$field] = $request->$field;
+            }
+        }
+
         $user = User::create($validated);
 
         return response()->json($user, 201);
