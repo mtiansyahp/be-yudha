@@ -1,0 +1,14 @@
+[90m= [39m[34;4mApp\Models\LogPenilaian[39;24m {#5857
+    [34mid[39m: [35m1[39m,
+    [34mpenilaian_id[39m: "[32m1-1[39m",
+    [34muser_id[39m: "[32m1[39m",
+    [34mpelatihan_id[39m: "[32m1[39m",
+    [34mtanggal_penilaian[39m: "[32m2025-07-07 07:49:30[39m",
+    [34mskor[39m: "[32m75.00[39m",
+    [34mketerangan[39m: "[32mBaik[39m",
+    [34mdetail[39m: "[32m{"T1":1,"T2":1,"Pendidikan":0,"Umur":1,"Sertifikasi":1,"PernahPelatihan":0,"Jurusan":1,"Posisi":1}[39m",
+    [34mcreated_by[39m: [36mnull[39m,
+    [34mcreated_at[39m: [36mnull[39m,
+    [34mupdated_at[39m: [36mnull[39m,
+  }
+
