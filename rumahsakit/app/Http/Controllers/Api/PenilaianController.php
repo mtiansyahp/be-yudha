@@ -15,6 +15,7 @@ class PenilaianController extends Controller
 {
     public function index()
     {
+
         return response()->json(Penilaian::with(['user', 'pelatihan'])->get());
     }
 
@@ -381,5 +382,17 @@ class PenilaianController extends Controller
             'message' => "Selesai memproses " . count($processed) . " peserta",
             'data'    => $processed
         ]);
+    }
+    public function destroyByPelatihan($pelatihanId)
+    {
+        $ids = Penilaian::where('pelatihan_id', $pelatihanId)->pluck('id')->toArray();
+
+        // Hapus log terlebih dahulu
+        LogPenilaian::whereIn('penilaian_id', $ids)->delete();
+
+        // Lalu hapus penilaian
+        Penilaian::whereIn('id', $ids)->delete();
+
+        return response()->json(['message' => 'Penilaian dan log berhasil dihapus']);
     }
 }

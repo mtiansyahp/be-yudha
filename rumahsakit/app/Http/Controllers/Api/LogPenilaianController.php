@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\LogPenilaian;
+use App\Models\Penilaian;
 use Illuminate\Http\Request;
 
 class LogPenilaianController extends Controller
@@ -105,5 +106,34 @@ class LogPenilaianController extends Controller
             ])->firstOrFail();
 
         return response()->json($log);
+    }
+
+    public function destroyByPelatihan($pelatihanId)
+    {
+        $ids = Penilaian::where('pelatihan_id', $pelatihanId)->pluck('id')->toArray();
+
+        // Hapus log terlebih dahulu
+        LogPenilaian::whereIn('penilaian_id', $ids)->delete();
+
+        // Lalu hapus penilaian
+        Penilaian::whereIn('id', $ids)->delete();
+
+        return response()->json(['message' => 'Penilaian dan log berhasil dihapus']);
+    }
+
+    public function destroyByPenilaianUser(string $penilaian_id, string $user_id)
+    {
+        $log = LogPenilaian::where([
+            ['penilaian_id', $penilaian_id],
+            ['user_id', $user_id]
+        ])->first();
+
+        if (!$log) {
+            return response()->json(['message' => 'Log not found'], 404);
+        }
+
+        $log->delete();
+
+        return response()->json(['message' => 'Log deleted successfully']);
     }
 }

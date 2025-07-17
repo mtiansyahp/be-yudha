@@ -37,11 +37,30 @@ class PelatihanController extends Controller
     {
         // 1. validasi field inti + peserta
         $payload = $request->validate([
-            'nama_pelatihan' => 'required|string',
-            'tanggal'        => 'required|date',
-            'peserta'        => 'array',          // ← peserta optional array
-            'peserta.*'      => 'exists:users,id' // tiap elemen harus id user
+            'nama_pelatihan'       => 'required|string',
+            'tanggal'              => 'required|date',
+            'peserta'              => 'array',
+            'peserta.*'            => 'exists:users,id',
+            'b1'                   => 'nullable|integer',
+            'b2'                   => 'nullable|integer',
+            'b3'                   => 'nullable|integer',
+            'b4'                   => 'nullable|integer',
+            'b5'                   => 'nullable|integer',
+            'a1'                   => 'nullable|integer',
+            'a2'                   => 'nullable|integer',
+            'a3'                   => 'nullable|integer',
+            'a4'                   => 'nullable|integer',
+            'a5'                   => 'nullable|integer',
+            'sertifikasi'          => 'nullable|integer',
+            'ikut_pelatihan'       => 'nullable|integer',
+            'pendidikan_terakhir'  => 'nullable|string',
+            'jurusan'              => 'nullable|string',
+            'posisi'               => 'nullable|string',
+            'max_umur'             => 'nullable|integer',
+            'syarat'               => 'nullable|string',
+            'kualifikasi'          => 'nullable|string',
         ]);
+
 
         // 2. dapatkan next id (seperti kode Anda)
         $nextId = DB::transaction(function () {

@@ -11,7 +11,7 @@ class DashboardController extends Controller
     {
         try {
             $summary = DB::table('vw_dashboard_summary')->get();
-
+           
             // Jika ingin group by `jenis` untuk front-end mudah render
             $grouped = $summary->groupBy('jenis')->map(function ($items) {
                 return $items->map(function ($item) {

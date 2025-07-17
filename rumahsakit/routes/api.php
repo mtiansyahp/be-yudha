@@ -54,3 +54,4 @@ Route::post('/penilaian/proses-batch/{pelatihanId}', [PenilaianController::class
 Route::get('log-penilaian/{id}', [LogPenilaianController::class, 'show']);
 
 Route::get('/dashboard/summary', [DashboardController::class, 'summary']);
+Route::delete('/penilaian/pelatihan/{pelatihanId}', [PenilaianController::class, 'destroyByPelatihan']);
