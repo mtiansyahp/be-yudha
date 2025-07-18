@@ -25,22 +25,23 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        // 1) Validasi input wajib
         $validated = $request->validate([
-            'nama' => 'required|string',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|string',
-            'role' => 'required|string',
+            'nama'     => 'required|string',
+            'email'    => 'required|email|unique:users',
+            'role'     => 'required|string',
         ]);
 
-        // Ambil nilai terakhir dari ID, lalu +1
-        $lastId = User::orderByDesc('id')->first()?->id;
-        $newId = $lastId ? (string)((int)$lastId + 1) : '1';
-        $validated['id'] = $newId;
+        // 2) Tentukan ID baru—mulai dari 1001, lalu +1 dari nilai terbesar saat ini (numerik)
+        $lastId = (int) DB::table('users')
+            ->max(DB::raw('CAST(id AS UNSIGNED)'));
+        $newId  = $lastId < 1001 ? 1001 : $lastId + 1;
+        $validated['id'] = (string) $newId;
 
-        // Password di-hash
-        $validated['password'] = Hash::make($validated['password']);
+        // 3) Hash password
+        $validated['password'] = '$2y$12$jtUrTRCto.CqrQHMihoQceA6.4DMmJPO.NlfOkQY4UBG8m8nD3ifC';
 
-        // Ambil semua field tambahan dari payload request
+        // 4) Ambil semua field opsional jika ada di request
         $optionalFields = [
             'posisi',
             'jurusan',
@@ -63,19 +64,22 @@ class UserController extends Controller
             'a2',
             'a3',
             'a4',
-            'a5'
+            'a5',
         ];
-
         foreach ($optionalFields as $field) {
-            if ($request->has($field)) {
-                $validated[$field] = $request->$field;
+            if ($request->filled($field)) {
+                $validated[$field] = $request->input($field);
             }
         }
 
+        // 5) Buat user baru
         $user = User::create($validated);
 
+        // 6) Kembalikan response
         return response()->json($user, 201);
     }
+
+
 
     public function update(Request $request, $id)
     {
